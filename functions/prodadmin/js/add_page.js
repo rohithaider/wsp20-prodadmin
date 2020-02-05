@@ -72,7 +72,7 @@ function add_page(){
 
         const name = document.getElementById('name').value
         const summary = document.getElementById('summary').value
-        const price = document.getElementById('price').value
+        let price = document.getElementById('price').value
 
 
         const nameErrorTag = document.getElementById('name_error')
@@ -100,7 +100,7 @@ function add_page(){
             const ref = firebase.storage().ref(IMAGE_FOLDER + image)
             const taskSnapshot = await ref.put(glImageFile2Add)
             const image_url = await taskSnapshot.ref.getDownloadURL()
-            console.log('image_url',image_url)
+            //console.log('image_url',image_url)
 
             price = Number(price)
             await firebase.firestore().collection(COLLECTION ).doc()
