@@ -16,7 +16,7 @@ function home_page(){
         glPageContent.innerHTML+=`
         
         <a href = '/add' class="btn btn-outline-primary">Add a product </a>
-        <a href = '/show' class="btn btn-outline-primary">show a product </a>
+        <a href = '/show' class="btn btn-outline-primary">show products </a>
         
         <button class = "btn btn-outline-danger" type "button" onclick = "logOut()">Log Out </button>
         
