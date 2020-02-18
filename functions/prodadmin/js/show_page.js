@@ -54,9 +54,10 @@ function show_page(){
 
     }
 
-    for(let index =0; index<products.length;index++){
+    for(let index = 0; index < products.length;index++){
 
-        const p = products[index]
+        const p = products[index]  
+        if (!p) continue;
 
         glPageContent.innerHTML += `
         
@@ -65,6 +66,11 @@ function show_page(){
         <div class="card-body">
         <h5 class="card-title">${p.name}</h5>
         <p class="card-text">${p.price}<br/>${p.summary}</p>
+        <button class ="btn btn-primary" type="button"
+        onclick = "editProduct(${index})">Edit</button>
+
+        <button class ="btn btn-danger" type="button"
+        onclick = "deleteProduct(${index})">Delete</button>
         
         </div>
       </div>
@@ -76,6 +82,34 @@ function show_page(){
     
 
 
+    }
+
+    async function deleteProduct(index){
+        try {
+            const p = products[index]
+
+            console.log('await doc delete')
+            //delete (1) Firestore doc, (2) Storage Image
+            await firebase.firestore().collection(COLLECTION).doc(p.docId).delete()
+
+        
+
+            const imageRef = firebase.storage().ref().child(IMAGE_FOLDER + p.image)
+
+            console.log('await image delete')
+            await imageRef.delete()
+
+            //assign id for card
+
+            const card = document.getElementById(p.docId)
+            card.parentNode.removeChild(card)
+
+            delete products[index]
+        } catch (e) {
+
+            glPageContent.innerHTML  = 'Delete Error: <br>' + JSON.stringify(e)
+            
+        }
     }
 
     
