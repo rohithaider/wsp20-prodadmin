@@ -30,9 +30,9 @@ async function show_page_secured() {
 
         const snapshot = await firebase.firestore().collection(COLLECTION)
         
-                                .where("name","==","p1")
-                                .orderBy("price")
-                                .get()
+        
+        .orderBy("price")                            
+        .get()
         snapshot.forEach(doc => {
             const { name, summary, price, image, image_url } = doc.data()
 
