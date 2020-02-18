@@ -25,7 +25,7 @@ function login_page() {
             
             
             
-            `
+            `;
 
         }
 

@@ -3,9 +3,9 @@
 function home_page(){
 
 
-    glPageContent.innerHTML='<h1> Home Page </h1>'
+    auth('prodadmin@test.com',home_page_secured,'/login')
 
-    home_page_secured()
+    
     
     
     }
