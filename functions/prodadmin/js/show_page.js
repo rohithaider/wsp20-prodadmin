@@ -1,19 +1,19 @@
-function show_page(){
+function show_page() {
 
 
     show_page_secured()
-    
-    
-    }
+
+
+}
 
 
 
-    let products; //list of products from database
+let products; //list of products from database
 
-    async function show_page_secured() {
+async function show_page_secured() {
 
-        glPageContent.innerHTML='<h1> Show Products </h1>'
-        glPageContent.innerHTML+=`
+    glPageContent.innerHTML = '<h1> Show Products </h1>'
+    glPageContent.innerHTML += `
         
         <a href = '/home' class="btn btn-outline-primary">Home </a>
         <a href = '/add' class="btn btn-outline-primary">Add a product </a>
@@ -24,39 +24,39 @@ function show_page(){
         
         `;
 
-        try {
+    try {
 
-            products = []
-    
-            const snapshot = await firebase.firestore().collection(COLLECTION).get()
-            snapshot.forEach(doc => {
-                const{name,summary,price,image,image_url }= doc.data()
-    
-                const p = {docId: doc.id,name,summary,price,image,image_url}
-                products.push(p)
-            })
-            
-        } catch (e) {
-    
-            glPageContent.innerHTML = 'Firestore access error. Try again later ! <br>'+e
-            return
-            
-        }
-    
+        products = []
 
-        //console.log(products)
+        const snapshot = await firebase.firestore().collection(COLLECTION).get()
+        snapshot.forEach(doc => {
+            const { name, summary, price, image, image_url } = doc.data()
 
-        if(products.length ===0){
+            const p = { docId: doc.id, name, summary, price, image, image_url }
+            products.push(p)
+        })
 
-            glPageContent += '<h1>No products in the database</h1>'
-            return
-    
+    } catch (e) {
+
+        glPageContent.innerHTML = 'Firestore access error. Try again later ! <br>' + e
+        return
 
     }
 
-    for(let index = 0; index < products.length;index++){
 
-        const p = products[index]  
+    //console.log(products)
+
+    if (products.length === 0) {
+
+        glPageContent += '<h1>No products in the database</h1>'
+        return
+
+
+    }
+
+    for (let index = 0; index < products.length; index++) {
+
+        const p = products[index]
         if (!p) continue;
 
         glPageContent.innerHTML += `
@@ -79,43 +79,103 @@ function show_page(){
         `;
     }
 
+
+
+
+}
+
+let cardOriginal
+
+async function editProduct(index) {
+
+    const p = products[index]
+    const card = document.getElementById(p.docId)
+
+    cardOriginal = card.innerHTML
     
 
+    card.innerHTML = `
+        
+                <div class= "form-group">
 
-    }
+                Name: <input class = "form-control" type = "text" id = "name" value= "${p.name}"/>
+                <p id = "name_error" style="color:red;"/>
 
-    async function deleteProduct(index){
-        try {
-            const p = products[index]
+                </div>
 
-            console.log('await doc delete')
-            //delete (1) Firestore doc, (2) Storage Image
-            await firebase.firestore().collection(COLLECTION).doc(p.docId).delete()
+                <div class= "form-group">
 
+                Summary: <br>
+                <textarea class = "form-control" id = "summary" cols = "40" rows="5">${p.summary}</textarea>
+                <p id = "summary_error" style="color:red;"/>
+
+                </div>
+
+                <div class= "form-group">
+
+                Price: <input class = "form-control" type = "text" id = "price" value = "${p.price}"/>
+                <p id = "price_error" style="color:red;"/>
+
+                </div>
+
+                Current Image:<br>
+                <img src="${p.image_url}"><br>
+
+
+                <div class= "form-group">
+
+                New Image: <input type = "file" id= "imageButton" value = "upload" />
+
+
+                </div> 
+                <button class = "btn btn-danger" type = "button" onclick ="update(${index})" >Update</button>
+                <button class = "btn btn-secondary" type = "button" onclick ="cancel(${index})" >Cancel</button>
+                            
+                        
+                        
+        
+        
+        
+        `;
         
 
-            const imageRef = firebase.storage().ref().child(IMAGE_FOLDER + p.image)
 
-            console.log('await image delete')
-            await imageRef.delete()
 
-            //assign id for card
+}
 
-            const card = document.getElementById(p.docId)
-            card.parentNode.removeChild(card)
 
-            delete products[index]
-        } catch (e) {
+async function deleteProduct(index) {
+    try {
+        const p = products[index]
 
-            glPageContent.innerHTML  = 'Delete Error: <br>' + JSON.stringify(e)
-            
-        }
+        console.log('await doc delete')
+        //delete (1) Firestore doc, (2) Storage Image
+        await firebase.firestore().collection(COLLECTION).doc(p.docId).delete()
+
+
+
+        const imageRef = firebase.storage().ref().child(IMAGE_FOLDER + p.image)
+
+        console.log('await image delete')
+        await imageRef.delete()
+
+        //assign id for card
+
+        const card = document.getElementById(p.docId)
+        card.parentNode.removeChild(card)
+
+        delete products[index]
+    } catch (e) {
+
+        glPageContent.innerHTML = 'Delete Error: <br>' + JSON.stringify(e)
+
     }
-
-    
-
+}
 
 
 
-  
+
+
+
+
 
