@@ -30,7 +30,7 @@ async function show_page_secured() {
 
         const snapshot = await firebase.firestore().collection(COLLECTION)
         
-                                .where("name","==","p1")
+                                
                                 .orderBy("price")
                                 .get()
         snapshot.forEach(doc => {
@@ -156,7 +156,8 @@ function editProduct(index){
 
     <div class= "form-group">
 
-    New Image: <input type = "file" id= "imageButton" value = "upload" />
+    New Image: <input type = "file" id= "imageButton" value = "upload" accept="image/*"  onchange="showMyImage(this)" >
+    <img id="thumbnil" style="width:100%; margin-top:20px;"  src="" alt="image"/>
     
 
     </div> 
@@ -260,6 +261,27 @@ async function update(index){
         
     }
 
+}
+
+
+function showMyImage(fileInput) {
+    var files = fileInput.files;
+    for (var i = 0; i < files.length; i++) {           
+        var file = files[i];
+        var imageType = /image.*/;     
+        if (!file.type.match(imageType)) {
+            continue;
+        }           
+        var img=document.getElementById("thumbnil");            
+        img.file = file;    
+        var reader = new FileReader();
+        reader.onload = (function(aImg) { 
+            return function(e) { 
+                aImg.src = e.target.result; 
+            }; 
+        })(img);
+        reader.readAsDataURL(file);
+    }    
 }
 
 
