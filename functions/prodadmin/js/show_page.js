@@ -2,16 +2,29 @@ function show_page() {
     auth('prodadmin@test.com',show_page_secured,'/login')
 
     
+<<<<<<< HEAD
+=======
+
+
+}
+>>>>>>> 4c86885afa42fd648f512fca9e8a7c82deb55fc7
 
 
 }
 
+<<<<<<< HEAD
 
 
 let products; //list of products from database
 
 async function show_page_secured() {
 
+=======
+let products; //list of products from database
+
+async function show_page_secured() {
+
+>>>>>>> 4c86885afa42fd648f512fca9e8a7c82deb55fc7
     glPageContent.innerHTML = '<h1> Show Products </h1>'
     glPageContent.innerHTML += `
         
@@ -30,15 +43,22 @@ async function show_page_secured() {
 
         const snapshot = await firebase.firestore().collection(COLLECTION)
         
+<<<<<<< HEAD
         
         .orderBy("price")                            
         .get()
+=======
+                                .where("name","==","p1")
+                                .orderBy("price")
+                                .get()
+>>>>>>> 4c86885afa42fd648f512fca9e8a7c82deb55fc7
         snapshot.forEach(doc => {
             const { name, summary, price, image, image_url } = doc.data()
 
             const p = { docId: doc.id, name, summary, price, image, image_url }
             products.push(p)
         })
+<<<<<<< HEAD
 
     } catch (e) {
 
@@ -60,6 +80,29 @@ async function show_page_secured() {
 
     for (let index = 0; index < products.length; index++) {
 
+=======
+
+    } catch (e) {
+
+        glPageContent.innerHTML = 'Firestore access error. Try again later ! <br>' + e
+        return
+
+    }
+
+
+    console.log(products)
+
+    if (products.length === 0) {
+
+        glPageContent.innerHTML += '<h1>No products in the database</h1>'
+        return
+
+
+    }
+
+    for (let index = 0; index < products.length; index++) {
+
+>>>>>>> 4c86885afa42fd648f512fca9e8a7c82deb55fc7
         const p = products[index]
         if (!p) continue;
 
@@ -97,7 +140,25 @@ async function deleteProduct(index) {
         //delete (1) Firestore doc, (2) Storage Image
         await firebase.firestore().collection(COLLECTION).doc(p.docId).delete()
 
+<<<<<<< HEAD
 
+
+        const imageRef = firebase.storage().ref().child(IMAGE_FOLDER + p.image)
+
+        //console.log('await image delete')
+        await imageRef.delete()
+=======
+>>>>>>> 4c86885afa42fd648f512fca9e8a7c82deb55fc7
+
+        //assign id for card
+
+        const card = document.getElementById(p.docId)
+        card.parentNode.removeChild(card)
+
+        delete products[index]
+    } catch (e) {
+
+        glPageContent.innerHTML = 'Delete Error: <br>' + JSON.stringify(e)
 
         const imageRef = firebase.storage().ref().child(IMAGE_FOLDER + p.image)
 
@@ -127,6 +188,7 @@ function editProduct(index){
     const p = products[index]
     const card = document.getElementById(p.docId)
     cardOriginal =  card.innerHTML 
+<<<<<<< HEAD
 
     card.innerHTML=`
     <div class= "form-group">
@@ -169,6 +231,42 @@ function editProduct(index){
 
     </div> 
     <button class = "btn btn-danger" type = "button" onclick ="update(${index})"  >>Update</button>
+=======
+
+    card.innerHTML=`
+    <div class= "form-group">
+
+        Name: <input class = "form-control" type = "text" id = "name" value="${p.name}" />
+        <p id = "name_error" style="color:red;"/>
+
+    </div>
+
+    <div class= "form-group">
+
+    Summary: <br>
+    <textarea class = "form-control" id = "summary" cols = "40" rows="5">${p.summary}</textarea>
+    <p id = "summary_error" style="color:red;"/>
+
+    </div>
+
+    <div class= "form-group">
+
+    Price: <input class = "form-control" type = "text" id = "price" value = "${p.price}"/>
+    <p id = "price_error" style="color:red;"/>
+
+    </div>
+    Current Image:<br>
+    <img src="${p.image_url}"><br>
+
+
+    <div class= "form-group">
+
+    New Image: <input type = "file" id= "imageButton" value = "upload" />
+    
+
+    </div> 
+    <button class = "btn btn-danger" type = "button" onclick ="update(${index})">Update</button>
+>>>>>>> 4c86885afa42fd648f512fca9e8a7c82deb55fc7
     <button class = "btn btn-secondary" type = "button" onclick ="cancel(${index})">Cancel</button>
 
     
@@ -197,8 +295,11 @@ function cancel(index){
 
 async function update(index){
 
+<<<<<<< HEAD
     
 
+=======
+>>>>>>> 4c86885afa42fd648f512fca9e8a7c82deb55fc7
     const p = products[index]
     const newName = document.getElementById('name').value
     const newSummary =document.getElementById('summary').value
@@ -272,6 +373,7 @@ async function update(index){
 
 }
 
+<<<<<<< HEAD
 function showMyImage(fileInput) {
     var files = fileInput.files;
     for (var i = 0; i < files.length; i++) {           
@@ -292,6 +394,8 @@ function showMyImage(fileInput) {
     }    
 }
 
+=======
+>>>>>>> 4c86885afa42fd648f512fca9e8a7c82deb55fc7
 
 
 
